@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paiement Sécurisé</title>
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/payement.css">
+</head>
+<body class="flex items-center justify-center p-4">
+    <div class="w-full max-w-4xl">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <div class="logo">e-Dr TIM payement</div>
+            <div class="flex items-center space-x-2 text-gray-600">
+                <i class="fas fa-lock"></i>
+                <span class="font-medium">Paiement 100% sécurisé</span>
+            </div>
+        </div>
+        
+        <!-- Main Card -->
+        <div class="card p-8">
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">Finalisez votre paiement</h1>
+                <p class="text-gray-600">Sélectionnez votre méthode de paiement préférée et complétez les informations requises</p>
+            </div>
+            
+            <!-- Payment Options -->
+            <div class="mb-10">
+                <h2 class="text-xl font-semibold text-gray-800 mb-6">Méthode de paiement</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Orange Money -->
+                    <div class="payment-option" id="orange-money" onclick="selectPayment('orange-money')">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 rounded-lg bg-orange-100 flex items-center justify-center mr-4">
+                                <i class="fas fa-mobile-alt text-2xl text-orange-500"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-800">Orange Money</h3>
+                                <p class="text-sm text-gray-500">Paiement mobile Orange</p>
+                            </div>
+                        </div>                       
+                    </div>
+                    
+                    <!-- Mobile Money -->
+                    <div class="payment-option" id="mobile-money" onclick="selectPayment('mobile-money')">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center mr-4">
+                                <i class="fas fa-money-bill-wave text-2xl text-blue-500"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-800">Mobile Money</h3>
+                                <p class="text-sm text-gray-500">Paiement mobile MTN</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Visa/MasterCard -->
+                    <div class="payment-option selected" id="card" onclick="selectPayment('card')">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 rounded-lg bg-purple-100 flex items-center justify-center mr-4">
+                                <i class="fas fa-credit-card text-2xl text-purple-500"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-800">Carte Bancaire</h3>
+                                <p class="text-sm text-gray-500">Visa / MasterCard</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Payment Form -->
+            <div class="mb-10">
+                <h2 class="text-xl font-semibold text-gray-800 mb-6">Détails du paiement</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Left Column -->
+                    <div>
+                        <!-- Justificatif -->
+                        <div class="mb-6">
+                            <label class="block text-gray-700 font-medium mb-2" for="justification">
+                                <i class="fas fa-file-alt mr-2"></i>Justificatif
+                            </label>
+                            <textarea 
+                                id="justification" 
+                                class="input-field w-full h-32 resize-none" 
+                                placeholder="Décrivez la raison de ce paiement (ex: Achat de matériel, Facture de service, etc.)"></textarea>
+                            <p class="text-sm text-gray-500 mt-2">Décrivez brièvement l'objet de ce paiement</p>
+                        </div>
+                        
+                        <!-- Montant -->
+                        <div class="mb-6">
+                            <label class="block text-gray-700 font-medium mb-2" for="amount">
+                                <i class="fas fa-money-bill-wave mr-2"></i>Montant
+                            </label>
+                            <div class="flex items-center">
+                                <div class="relative flex-1">
+                                    <input 
+                                        type="number" 
+                                        id="amount" 
+                                        class="input-field w-full pl-12" 
+                                        placeholder="0.00"
+                                        min="0"
+                                        step="0.01">
+                                    <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500">
+                                        <!-- <i class="fas fa-dollar-sign"></i> -->
+                                    </div>
+                                </div>
+                                <div class="ml-4 w-32">
+                                    <select id="currency" class="currency-select w-full">
+                                        <option value="XOF">XOF - Franc CFA</option>
+                                        <option value="EUR">EUR - Euro</option>
+                                        <option value="USD">USD - Dollar US</option>
+                                        <option value="GBP">GBP - Livre Sterling</option>
+                                 
+                                    </select>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-2">Saisissez le montant et sélectionnez la devise</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Column -->
+                    <div>
+                        <!-- Payment Details based on selection -->
+                        <div id="payment-details">
+                            <!-- Default Card Details -->
+                            <div class="mb-6">
+                                <label class="block text-gray-700 font-medium mb-2">
+                                    <i class="fas fa-credit-card mr-2"></i>Informations de la carte
+                                </label>
+                                
+                                <!-- Numéro de carte -->
+                                <div class="input-wrapper mb-4">
+                                    <input 
+                                        type="text" 
+                                        id="card-number" 
+                                        class="input-field" 
+                                        placeholder="0000 0000 0000 0000"
+                                        maxlength="19"
+                                        autocomplete="cc-number">
+                                    <span class="card-icons">
+                                        <i class="fab fa-cc-visa text-2xl text-blue-600 card-brand" id="visa-icon"></i>
+                                        <i class="fab fa-cc-mastercard text-2xl text-red-500 card-brand" id="mastercard-icon"></i>
+                                    </span>
+                                </div>
+                                <p class="error-message" id="card-number-error">Numéro de carte invalide (16 chiffres requis)</p>
+                                
+                                <!-- Date d'expiration et CVV -->
+                                <div class="grid grid-cols-2 gap-4 mb-4">
+                                    <div class="input-wrapper">
+                                        <input 
+                                            type="text" 
+                                            id="card-expiry" 
+                                            class="input-field" 
+                                            placeholder="MM/AA"
+                                            maxlength="5"
+                                            autocomplete="cc-exp">
+                                        <i class="fas fa-calendar input-icon" id="card-expiry-icon"></i>
+                                    </div>
+                                    <p class="error-message" id="card-expiry-error">Date invalide (format MM/AA)</p>
+                                    
+                                    <div class="input-wrapper">
+                                        <input 
+                                            type="text" 
+                                            id="card-cvv" 
+                                            class="input-field" 
+                                            placeholder="CVV"
+                                            maxlength="4"
+                                            autocomplete="cc-csc">
+                                        <i class="fas fa-lock input-icon" id="card-cvv-icon"></i>
+                                    </div>
+                                    <p class="error-message" id="card-cvv-error">CVV invalide (3 ou 4 chiffres)</p>
+                                </div>
+                                
+                                <!-- Nom sur la carte -->
+                                <div class="input-wrapper">
+                                    <input 
+                                        type="text" 
+                                        id="card-name" 
+                                        class="input-field w-full" 
+                                        placeholder="Nom du titulaire"
+                                        autocomplete="cc-name">
+                                    <i class="fas fa-user input-icon" id="card-name-icon"></i>
+                                </div>
+                                <p class="error-message" id="card-name-error">Nom invalide (lettres uniquement, min. 3 caractères)</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Summary -->
+                        <div class="bg-gray-50 rounded-lg p-6 mb-6">
+                            <h3 class="font-semibold text-gray-800 mb-4">Récapitulatif</h3>
+                            <div class="space-y-3">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Méthode:</span>
+                                    <span class="font-medium" id="method-summary">Carte Bancaire</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Montant:</span>
+                                    <span class="font-medium" id="amount-summary">0.00 XOF</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Frais:</span>
+                                    <span class="font-medium">0.00 XOF</span>
+                                </div>
+                                <div class="border-t pt-3 mt-3">
+                                    <div class="flex justify-between text-lg font-bold">
+                                        <span>Total:</span>
+                                        <span id="total-summary">0.00 XOF</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="flex justify-between items-center pt-6 border-t">
+                <button class="text-gray-600 font-medium hover:text-gray-800 transition-colors">
+                    <i class="fas fa-arrow-left mr-2"></i>Retour
+                </button>
+                <button class="btn btn-sm btn-primary" onclick="processPayment()">
+                    Payer maintenant <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Security Footer -->
+        <div class="mt-8 text-center text-gray-500 text-sm">
+            <div class="flex justify-center space-x-6 mb-4">
+                <div class="flex items-center">
+                    <i class="fas fa-shield-alt text-green-500 mr-2"></i>
+                    <span>Paiement sécurisé SSL</span>
+                </div>
+                <div class="flex items-center">
+                    <i class="fas fa-lock text-green-500 mr-2"></i>
+                    <span>Données cryptées</span>
+                </div>
+                <div class="flex items-center">
+                    <i class="fas fa-user-shield text-green-500 mr-2"></i>
+                    <span>Confidentialité garantie</span>
+                </div>
+            </div>
+            <p>© 2026 e-Dr TIM paiement. Tous droits réservés.</p>
+        </div>
+    </div>
+
+    <script src="../assets/js/payement.js"></script>
+</body>
+</html>
