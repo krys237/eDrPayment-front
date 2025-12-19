@@ -78,74 +78,11 @@ function updatePaymentDetails() {
             </div>
         `;
     } else {
+        // Pour le paiement par carte, on affiche un message de redirection
         detailsHTML = `
-            <div class="mb-6">
-                <label class="block text-gray-700 font-medium mb-2">
-                    <i class="fas fa-credit-card mr-2"></i>Informations de la carte
-                </label>
-                
-                <!-- Numéro de carte -->
-                <div class="input-wrapper mb-4">
-                    <input 
-                        type="text" 
-                        id="card-number" 
-                        class="input-field" 
-                        placeholder="0000 0000 0000 0000"
-                        maxlength="19"
-                        autocomplete="cc-number"
-                        oninput="formatCardNumber(this)">
-                    <span class="card-icons">
-                        <i class="fab fa-cc-visa text-2xl text-blue-600 card-brand" id="visa-icon"></i>
-                        <i class="fab fa-cc-mastercard text-2xl text-red-500 card-brand" id="mastercard-icon"></i>
-                    </span>
-                </div>
-                <p class="error-message" id="card-number-error">Numéro de carte invalide (16 chiffres requis)</p>
-                
-                <!-- Date d'expiration et CVV -->
-                <div class="grid grid-cols-2 gap-4 mb-4">
-                    <div>
-                        <div class="input-wrapper">
-                            <input 
-                                type="text" 
-                                id="card-expiry" 
-                                class="input-field" 
-                                placeholder="MM/AA"
-                                maxlength="5"
-                                autocomplete="cc-exp"
-                                oninput="formatCardExpiry(this)">
-                            <i class="fas fa-calendar input-icon" id="card-expiry-icon"></i>
-                        </div>
-                        <p class="error-message" id="card-expiry-error">Date invalide (format MM/AA)</p>
-                    </div>
-                    
-                    <div>
-                        <div class="input-wrapper">
-                            <input 
-                                type="text" 
-                                id="card-cvv" 
-                                class="input-field" 
-                                placeholder="CVV"
-                                maxlength="4"
-                                autocomplete="cc-csc"
-                                oninput="formatCVV(this)">
-                            <i class="fas fa-lock input-icon" id="card-cvv-icon"></i>
-                        </div>
-                        <p class="error-message" id="card-cvv-error">CVV invalide (3 ou 4 chiffres)</p>
-                    </div>
-                </div>
-                
-                <!-- Nom sur la carte -->
-                <div class="input-wrapper">
-                    <input 
-                        type="text" 
-                        id="card-name" 
-                        class="input-field w-full" 
-                        placeholder="Nom du titulaire"
-                        autocomplete="cc-name"
-                        oninput="validateCardName(this)">
-                    <i class="fas fa-user input-icon" id="card-name-icon"></i>
-                </div>
-                <p class="error-message" id="card-name-error">Nom invalide (lettres uniquement, min. 3 caractères)</p>
+            <div class="mb-6 text-center p-4 bg-gray-100 rounded-lg">
+                <i class="fas fa-shield-alt text-3xl text-purple-500 mb-2"></i>
+                <p class="text-gray-700 font-medium">Vous allez être redirigé vers une page de paiement sécurisée pour finaliser votre transaction.</p>
             </div>
         `;
     }
@@ -392,36 +329,7 @@ function validateAllFields() {
     }
     
     // Validate payment details based on selected method
-    if (selectedPayment === 'card') {
-        const cardNumber = document.getElementById('card-number');
-        const cardExpiry = document.getElementById('card-expiry');
-        const cardCVV = document.getElementById('card-cvv');
-        const cardName = document.getElementById('card-name');
-        
-        if (!patterns.cardNumber.test(cardNumber.value)) {
-            cardNumber.classList.add('error');
-            document.getElementById('card-number-error').classList.add('show');
-            isValid = false;
-        }
-        
-        if (!patterns.cardExpiry.test(cardExpiry.value)) {
-            cardExpiry.classList.add('error');
-            document.getElementById('card-expiry-error').classList.add('show');
-            isValid = false;
-        }
-        
-        if (!patterns.cardCVV.test(cardCVV.value)) {
-            cardCVV.classList.add('error');
-            document.getElementById('card-cvv-error').classList.add('show');
-            isValid = false;
-        }
-        
-        if (!patterns.cardName.test(cardName.value)) {
-            cardName.classList.add('error');
-            document.getElementById('card-name-error').classList.add('show');
-            isValid = false;
-        }
-    } else if (selectedPayment === 'orange-money') {
+    if (selectedPayment === 'orange-money') {
         const orangePhone = document.getElementById('orange-phone');
         if (!patterns.phone.test(orangePhone.value.replace(/\+/g, ''))) {
             orangePhone.classList.add('error');
@@ -430,6 +338,7 @@ function validateAllFields() {
         }
     } else if (selectedPayment === 'mobile-money') {
         const mobilePhone = document.getElementById('mobile-phone');
+        
         if (!patterns.phone.test(mobilePhone.value.replace(/\+/g, ''))) {
             mobilePhone.classList.add('error');
             document.getElementById('mobile-phone-error').classList.add('show');
@@ -449,7 +358,6 @@ function processPayment() {
     const amount = document.getElementById('amount').value;
     const justification = document.getElementById('justification').value;
     const currency = document.getElementById('currency').value;
-    const method = document.getElementById('method-summary').textContent;
     
     // Show loading state
     const payButton = document.querySelector('.btn-primary');
@@ -457,7 +365,7 @@ function processPayment() {
     payButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Traitement en cours...';
     payButton.disabled = true;
     
-    // Déterminer le provider_id en fonction de la méthode de paiement choisie
+    // Déterminer le provider_id
     let providerId;
     if (selectedPayment === 'orange-money') {
         providerId = 1;
@@ -467,91 +375,125 @@ function processPayment() {
         providerId = 3;
     }
 
-    // On continue seulement si un provider a été identifié
-    if (providerId) {
-        // Récupérer les informations de l'utilisateur depuis sessionStorage
-        const user = JSON.parse(sessionStorage.getItem('user'));
-        if (!user) {
-            alert('Erreur : Informations utilisateur non trouvées. Veuillez vous reconnecter.');
-            window.location.href = 'auth-login-basic.html';
-            return;
-        }
-
-        const data = {
-            module_origin: justification,
-            amount: amount,
-            provider_id: providerId,
-            currency: currency
-        };
-
-        // account informations
-        data.account = {
-          "balance": "string",
-          "currency": "string",
-          "user": {
-            "telephone": user.telephone,
-            "email": user.email,
-            "last_name": user.last_name
-          }
-        }
-        data.provider = {
-          "account": {
-            "balance": "string",
-            "currency": "string",
-            "user": {
-              "telephone": "+881292694",
-              "email": "user@example.com",
-              "last_name": "string"
-            }
-          }
-        }
-
-        // Récupérer le token d'authentification depuis le localStorage
-        const token = localStorage.getItem('authToken');
-        if (!token) {
-            alert('Erreur : Utilisateur non connecté. Veuillez vous reconnecter.');
-            window.location.href = 'auth-login-basic.html'; // Rediriger vers la page de connexion
-            return;
-        }
-
-        fetch('http://192.168.100.175:8001/api-v1/paiement/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(data),
-        })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                return response.json().then(err => { throw new Error(JSON.stringify(err)) });
-            }
-        })
-        .then(data => {
-            alert('Paiement initié avec succès ! Veuillez suivre les instructions sur votre téléphone.');
-            console.log('Success:', data);
-            // Vous pouvez rediriger ou afficher un message de succès plus détaillé ici
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-            alert('Une erreur est survenue lors de l\'initiation du paiement : ' + error.message);
-        })
-        .finally(() => {
-            // Reset button
-            payButton.innerHTML = originalText;
-            payButton.disabled = false;
-        });
-    } else {
-        // Simulate payment for other methods
-         setTimeout(() => {
-            alert(`Paiement simulé avec succès pour ${selectedPayment}.`);
-            payButton.innerHTML = originalText;
-            payButton.disabled = false;
-        }, 2000);
+    if (!providerId) {
+        alert('Méthode de paiement invalide');
+        payButton.innerHTML = originalText;
+        payButton.disabled = false;
+        return;
     }
+
+    // Récupérer les informations utilisateur
+    const user = JSON.parse(sessionStorage.getItem('user'));
+    if (!user) {
+        alert('Erreur : Informations utilisateur non trouvées. Veuillez vous reconnecter.');
+        window.location.href = 'auth-login-basic.html';
+        return;
+    }
+
+    const data = {
+        module_origin: justification,
+        amount: amount,
+        provider_id: providerId,
+        currency: currency,
+        account: {
+            "balance": "string",
+            "currency": currency,
+            "user": {
+                "telephone": user.telephone,
+                "email": user.email,
+                "last_name": user.last_name
+            }
+        },
+        provider: {
+            "account": {
+                "balance": "string",
+                "currency": currency,
+                "user": {
+                    "telephone": "+881292694",
+                    "email": "user@example.com",
+                    "last_name": "string"
+                }
+            }
+        }
+    };
+
+    // Récupérer le token
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+        alert('Erreur : Utilisateur non connecté. Veuillez vous reconnecter.');
+        window.location.href = 'auth-login-basic.html';
+        return;
+    }
+
+    fetch('http://192.168.100.175:8001/api-v1/paiement/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(data),
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            return response.json().then(err => { 
+                throw new Error(JSON.stringify(err)) 
+            });
+        }
+    })
+    .then(responseData => {
+        // 🔹 CAS 1 : Paiement par Carte Bancaire (CyberSource)
+        if (providerId === 3) {
+            // // Option A : Si l'API retourne directement { paymentUrl, fields }
+            if (responseData.paymentUrl && responseData.fields) {
+                console.log("🔵 Redirection CyberSource (structure directe)");
+                redirectToCyberSource(responseData.paymentUrl, responseData.fields);
+                return;
+            }
+            // Si aucune structure ne correspond
+            console.error("❌ Structure de réponse CyberSource introuvable :", responseData);
+            alert('Erreur : Structure de réponse invalide pour le paiement par carte');
+            return;
+        }
+
+        // 🔹 CAS 2 : Paiement Mobile Money / Orange Money
+        alert('✅ Paiement initié avec succès ! Veuillez suivre les instructions sur votre téléphone.');
+        console.log('Success:', responseData);
+    })
+    .catch((error) => {
+        console.error('❌ Erreur:', error);
+        alert('Une erreur est survenue lors de l\'initiation du paiement : ' + error.message);
+    })
+    .finally(() => {
+        // Reset button
+        payButton.innerHTML = originalText;
+        payButton.disabled = false;
+    });
 }
+
+// 🔹 Fonction de redirection CyberSource (IDENTIQUE au code fonctionnel)
+function redirectToCyberSource(paymentUrl, fields) {
+    console.log("🚀 Redirection vers CyberSource...");
+    console.log("URL:", paymentUrl);
+    console.log("Fields:", fields);
+
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = paymentUrl;
+
+    Object.keys(fields).forEach((key) => {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = key;
+        input.value = fields[key];
+        form.appendChild(input);
+    });
+
+    document.body.appendChild(form);
+    form.submit();
+}
+
 
 // Initialize event listeners
 document.addEventListener('DOMContentLoaded', function() {
