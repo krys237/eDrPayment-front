@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="fr" class="light-style customizer-hide" dir="ltr" data-theme="theme-default">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+    <title>Paiement Réussi - Materio </title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="https://demos.themeselection.com/materio-bootstrap-html-admin-template/assets/img/favicon/favicon.ico" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" />
+
+    <!-- Core CSS (Bootstrap 5) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS for Success Page -->
+    <link rel="stylesheet" href="../assets/css/success.css"/>
+  </head>
+
+  <body>
+    <div class="success-card">
+      <!-- Logo -->
+      <div class="app-brand">
+        <a href="#" class="app-brand-link gap-2">
+          <span class="app-brand-logo demo">
+            
+          </span>
+          <span class="app-brand-text text-body fw-bolder">e-Dr TIM Payment</span>
+        </a>
+      </div>
+
+      <!-- Success Icon avec animation -->
+      <div class="success-icon-wrapper">
+        <i class="bx bx-check-circle success-icon"></i>
+      </div>
+
+      <!-- Titre et sous-titre -->
+      <h1 class="success-title">Paiement réussi !</h1>
+      <p class="success-subtitle">Votre transaction a été traitée avec succès</p>
+
+      <!-- Status Badge -->
+      <div class="mb-4">
+        <span class="status-badge">
+          <i class="bx bx-check-shield"></i>
+          Transaction confirmée
+        </span>
+      </div>
+
+      <!-- Transaction Details -->
+      <!-- <div class="transaction-details">
+        <div class="detail-row">
+          <span class="detail-label">Référence</span>
+          <span class="detail-value" id="transaction-ref">TXN-2025-001234</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Date</span>
+          <span class="detail-value" id="transaction-date">22 Déc 2025, 14:39</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Méthode</span>
+          <span class="detail-value" id="payment-method">Visa •••• 4242</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Montant payé</span>
+          <span class="detail-value amount" id="transaction-amount">250.00 XAF</span>
+        </div>
+      </div> -->
+
+      <!-- Info supplémentaire -->
+      <p class="text-muted" style="font-size: 0.875rem; margin-bottom: 1.5rem;">
+        <i class="bx bx-envelope"></i> Un reçu de paiement a été envoyé à votre adresse email
+      </p>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <a href="index.html" class="btn btn-primary">
+          <i class="bx bx-home-circle me-1"></i>
+          Retour au tableau de bord
+        </a>
+        <button onclick="window.print()" class="btn btn-outline-secondary">
+          <i class="bx bx-printer me-1"></i>
+          Imprimer le reçu
+        </button>
+      </div>
+
+      <!-- Footer -->
+      <p class="text-center text-muted mt-4 mb-0" style="font-size: 0.8125rem;">
+        <i class="bx bx-info-circle"></i> Besoin d'aide ? <a href="#">Contactez le support</a>
+      </p>
+    </div>
+
+    <!-- Core JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+      // Récupérer les paramètres de l'URL (envoyés par CyberSource ou ton API)
+      const urlParams = new URLSearchParams(window.location.search);
+      
+      // Extraire les informations de transaction
+      const transactionRef = urlParams.get('reference_number') || urlParams.get('transaction_id') || 'TXN-2025-001234';
+      const amount = urlParams.get('amount') || '250.00';
+      const currency = urlParams.get('currency') || 'XAF';
+      const paymentMethod = urlParams.get('payment_method') || 'Carte Bancaire';
+      
+      // Mettre à jour les éléments de la page
+      document.getElementById('transaction-ref').textContent = transactionRef;
+      document.getElementById('transaction-amount').textContent = `${parseFloat(amount).toFixed(2)} ${currency}`;
+      
+      // Formater la date actuelle
+      const now = new Date();
+      const options = { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' };
+      const formattedDate = now.toLocaleDateString('fr-FR', options).replace(',', ' à');
+      document.getElementById('transaction-date').textContent = formattedDate;
+      
+      // Afficher la méthode de paiement
+      if (paymentMethod === 'card' || paymentMethod === 'Carte Bancaire') {
+        const cardLast4 = urlParams.get('card_last4') || '4242';
+        document.getElementById('payment-method').textContent = `Visa •••• ${cardLast4}`;
+      } else {
+        document.getElementById('payment-method').textContent = paymentMethod;
+      }
+
+      // Animation d'entrée au chargement (optionnel)
+      document.addEventListener('DOMContentLoaded', function() {
+        document.querySelector('.success-card').style.opacity = '0';
+        document.querySelector('.success-card').style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+          document.querySelector('.success-card').style.transition = 'all 0.5s ease';
+          document.querySelector('.success-card').style.opacity = '1';
+          document.querySelector('.success-card').style.transform = 'translateY(0)';
+        }, 100);
+      });
+    </script>
+  </body>
+</html>

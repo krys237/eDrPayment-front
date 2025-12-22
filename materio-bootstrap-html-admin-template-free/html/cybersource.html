@@ -6,7 +6,7 @@
 <body onload="document.forms[0].submit();">
     <p>Redirection sécurisée en cours…</p>
 
-    <form action="{{http://192.168.100.175:8001/api-v1/paiement/}}" method="post">
+    <form action="{{ payment_url }}" method="post">
         {% for key, value in fields.items %}
             <input type="hidden" name="{{ key }}" value="{{ value }}">
         {% endfor %}

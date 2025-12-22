@@ -1,4 +1,4 @@
-// payement.js
+// payment.js
 // Current selected payment method
 let selectedPayment = 'card';
 

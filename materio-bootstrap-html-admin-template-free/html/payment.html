@@ -11,13 +11,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../assets/css/payement.css">
+    <link rel="stylesheet" href="../assets/css/payment.css">
 </head>
 <body class="flex items-center justify-center p-4">
     <div class="w-full max-w-4xl">
         <!-- Header -->
         <div class="flex justify-between items-center mb-8">
-            <div class="logo">e-Dr TIM payement</div>
+            <div class="logo">e-Dr TIM payment</div>
             <div class="flex items-center space-x-2 text-gray-600">
                 <i class="fas fa-lock"></i>
                 <span class="font-medium">Paiement 100% sécurisé</span>
@@ -38,21 +38,28 @@
                     <!-- Orange Money -->
                     <div class="payment-option" id="orange-money" onclick="selectPayment('orange-money')">
                         <div class="flex items-center mb-4">
-                            <div class="w-12 h-12 rounded-lg bg-orange-100 flex items-center justify-center mr-4">
-                                <i class="fas fa-mobile-alt text-2xl text-orange-500"></i>
+                            <div class="w-24 h-20 rounded-lg bg-orange-100 flex items-center justify-center mr-4">
+                                <img 
+                                    src="../assets/img/illustrations/OrangeMoney.png" 
+                                    alt="Orange Money"
+                                    class="w-20 h-20 object-contain"
+                                >
                             </div>
                             <div>
                                 <h3 class="font-semibold text-gray-800">Orange Money</h3>
                                 <p class="text-sm text-gray-500">Paiement mobile Orange</p>
                             </div>
                         </div>                       
-                    </div>
-                    
+                    </div>                    
                     <!-- Mobile Money -->
                     <div class="payment-option" id="mobile-money" onclick="selectPayment('mobile-money')">
                         <div class="flex items-center mb-4">
-                            <div class="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center mr-4">
-                                <i class="fas fa-money-bill-wave text-2xl text-blue-500"></i>
+                            <div class="w-24 h-20 rounded-lg bg-blue-100 flex items-center justify-center mr-4">
+                                <img 
+                                    src="../assets/img/illustrations/MobileMoney.jpg" 
+                                    alt="Orange Money"
+                                    class="w-20 h-20 object-contain"
+                                >
                             </div>
                             <div>
                                 <h3 class="font-semibold text-gray-800">Mobile Money</h3>
@@ -64,8 +71,12 @@
                     <!-- Visa/MasterCard -->
                     <div class="payment-option selected" id="card" onclick="selectPayment('card')">
                         <div class="flex items-center mb-4">
-                            <div class="w-12 h-12 rounded-lg bg-purple-100 flex items-center justify-center mr-4">
-                                <i class="fas fa-credit-card text-2xl text-purple-500"></i>
+                            <div class="w-24 h-20 rounded-lg bg-purple-100 flex items-center justify-center mr-4">
+                                <img 
+                                    src="../assets/img/illustrations/visa-mastercard.webp" 
+                                    alt="Orange Money"
+                                    class="w-20 h-20 object-contain"
+                                >
                             </div>
                             <div>
                                 <h3 class="font-semibold text-gray-800">Carte Bancaire</h3>
@@ -225,7 +236,8 @@
             <!-- Action Buttons -->
             <div class="flex justify-between items-center pt-6 border-t">
                 <button class="text-gray-600 font-medium hover:text-gray-800 transition-colors">
-                    <i class="fas fa-arrow-left mr-2"></i>Retour
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    <a href="index.html">Retour</a>
                 </button>
                 <button class="btn btn-sm btn-primary" onclick="processPayment()">
                     Payer maintenant <i class="fas fa-arrow-right ml-2"></i>
@@ -253,6 +265,6 @@
         </div>
     </div>
 
-    <script src="../assets/js/payement.js"></script>
+    <script src="../assets/js/payment.js"></script>
 </body>
 </html>
